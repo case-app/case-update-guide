@@ -10,10 +10,10 @@ import { Clipboard } from '@angular/cdk/clipboard';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  providers: [I18nPipe]
+  providers: [I18nPipe],
 })
 export class AppComponent implements OnInit {
-  title = 'Angular Update Guide';
+  title = 'Case Update Guide';
 
   level = 1;
   options = {
@@ -27,39 +27,13 @@ export class AppComponent implements OnInit {
   afterRecommendations: Step[] = [];
 
   versions = [
-    { name: '13.0', number: 1300 },
-    { name: '12.0', number: 1200 },
-    { name: '11.0', number: 1100 },
-    { name: '10.2', number: 1020 },
-    { name: '10.1', number: 1010 },
-    { name: '10.0', number: 1000 },
-    { name: '9.1', number: 910 },
-    { name: '9.0', number: 900 },
-    { name: '8.2', number: 820 },
-    { name: '8.1', number: 810 },
-    { name: '8.0', number: 800 },
-    { name: '7.2', number: 720 },
-    { name: '7.1', number: 710 },
-    { name: '7.0', number: 700 },
-    { name: '6.1', number: 610 },
-    { name: '6.0', number: 600 },
-    { name: '5.2', number: 520 },
-    { name: '5.1', number: 510 },
-    { name: '5.0', number: 500 },
-    { name: '4.4', number: 440 },
-    { name: '4.3', number: 430 },
-    { name: '4.2', number: 420 },
-    { name: '4.1', number: 410 },
-    { name: '4.0', number: 400 },
-    { name: '2.4', number: 204 },
-    { name: '2.3', number: 203 },
-    { name: '2.2', number: 202 },
-    { name: '2.1', number: 201 },
-    { name: '2.0', number: 200 },
+    { name: '0.3', number: 3 },
+    { name: '0.2', number: 2 },
+    { name: '0.1', number: 1 },
   ];
-  from = this.versions.find((version) => version.name === '11.0');
-  to = this.versions.find((version) => version.name === '12.0');
-  futureVersion = 1300
+  from = this.versions.find((version) => version.name === '0.2');
+  to = this.versions.find((version) => version.name === '0.3');
+  futureVersion = 4;
   /**
    * Only save the locale in the URL if it was already there, or the user changed it
    */
@@ -70,10 +44,9 @@ export class AppComponent implements OnInit {
   constructor(
     public location: Location,
     public track: AnalyticsService,
-    public i18Service: I18nPipe,
-    private clipboard: Clipboard
+    private clipboard: Clipboard,
+    public i18Service: I18nPipe
   ) {
-
     const searchParams = new URLSearchParams(window.location.search);
     // Detect settings in URL
     this.level = parseInt(searchParams.get('l'), 10) || this.level;
@@ -93,14 +66,14 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.optionList =  [
-      { id: 'ngUpgrade', name: 'ngUpgrade', description: this.i18Service.transform('to combine AngularJS & Angular') },
-      { id: 'material', name: 'Angular Material', description: '' },
+    this.optionList = [
+      { id: 'ngUpgrade', name: 'ngUpgrade', description: this.i18Service.transform('to combine CaseJS & Case') },
+      { id: 'material', name: 'Case Material', description: '' },
     ];
   }
 
   @HostListener('click', ['$event.target'])
-  copyCode({tagName, textContent}) {
+  copyCode({ tagName, textContent }) {
     if (tagName === 'CODE') {
       this.clipboard.copy(textContent);
     }
@@ -113,23 +86,18 @@ export class AppComponent implements OnInit {
 
     // Refuse to generate recommendations for downgrades
     if (this.to.number < this.from.number) {
-      alert('We do not support downgrading versions of Angular.');
+      alert('We do not support downgrading versions of Case.');
       return;
     }
 
-    const labelTitle = this.i18Service.transform('Angular Update Guide');
+    const labelTitle = this.i18Service.transform('Case Update Guide');
     const labelBasic = this.i18Service.transform('Basic Apps');
     const labelMedium = this.i18Service.transform('Medium Apps');
     const labelAdvanced = this.i18Service.transform('Advanced Apps');
 
-    this.title =
-    `${labelTitle} | ${this.from.name} -> ${this.to.name}
-    ${this.i18Service.transform('for')}
-    ${
-      this.level < 2 ?
-        labelBasic : this.level < 3 ?
-          labelMedium : labelAdvanced
-    }`;
+    this.title = `${labelTitle} | ${this.from.name} -> ${this.to.name}
+ ${this.i18Service.transform('for')}
+    ${this.level < 2 ? labelBasic : this.level < 3 ? labelMedium : labelAdvanced}`;
 
     // Find applicable steps and organize them into before, during, and after upgrade
     for (const step of this.steps) {
@@ -218,7 +186,7 @@ export class AppComponent implements OnInit {
 
     // Provide npm/yarn instructions for versions before 6
     if (this.to.number < 600) {
-      const actionMessage = `Update all of your dependencies to the latest Angular and the right version of TypeScript.`;
+      const actionMessage = `Update all of your dependencies to the latest Case and the right version of TypeScript.`;
 
       if (isWindows) {
         const packages =
